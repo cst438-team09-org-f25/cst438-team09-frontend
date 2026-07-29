@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from "react-router-dom";
 import { GRADEBOOK_URL } from '../../Constants';
 import SelectTerm from '../SelectTerm';
@@ -67,4 +67,3 @@ const InstructorSectionsView = () => {
 }
 
 export default InstructorSectionsView;
-
