@@ -31,7 +31,7 @@ const AssignmentsStudentView = () => {
     }
   }
 
-  const headers = ['Course', 'Title', 'DueDate', 'Score'];
+  const headers = ['Course ID', 'Assignment', 'Due Date', 'Section', 'Score'];
 
   return (
     <>
@@ -40,9 +40,24 @@ const AssignmentsStudentView = () => {
 
       <SelectTerm buttonText="Get Assignments" onClick={fetchData} />
 
-      <p>To be implemented.  Display table with columns as given in headers.
-        Display assignment data.
-      </p>
+      <table className="Center">
+        <thead>
+          <tr>
+            {headers.map((s, idx) => (<th key={idx}>{s}</th>))}
+          </tr>
+        </thead>
+        <tbody>
+          {assignments.map((assignment) => (
+            <tr key={assignment.assignmentId}>
+              <td>{assignment.courseId}</td>
+              <td>{assignment.title}</td>
+              <td>{assignment.dueDate}</td>
+              <td>{assignment.sectionId}</td>
+              <td>{assignment.score}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </>
   );
 }

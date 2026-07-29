@@ -11,10 +11,8 @@ const ScheduleView = () => {
 
   const [enrollments, setEnrollments] = useState([]);
   const [message, setMessage] = useState('');
-  const [term, setTerm] = useState({});
 
   const prefetchEnrollments = ({ year, semester }) => {
-    setTerm({ year, semester });
     fetchEnrollments(year, semester);
   }
 
@@ -43,18 +41,75 @@ const ScheduleView = () => {
     }
   }
 
+  const dropEnrollment = async (enrollmentId) => {
+    try {
+      const response = await fetch(`${REGISTRAR_URL}/enrollments/${enrollmentId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('jwt'),
+          },
+        }
+      );
 
-  const headings = ["enrollmentId", "secNo", "courseId", "secId", "building", "room", "times", ""];
+      if (response.ok) {
+        setEnrollments(enrollments.filter((course) => course.enrollmentId !== enrollmentId));
+        setMessage('Enrollment dropped');
+      } else {
+        const body = await response.json();
+        setMessage(body);
+      }
+    } catch (err) {
+      setMessage(err);
+    }
+  }
+
+  const onDrop = (enrollmentId) => {
+    confirmAlert({
+      title: "Confirm to drop",
+      message: "Do you really want to drop this course?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => dropEnrollment(enrollmentId),
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
+  }
+
+
+  const headings = ["Year", "Semester", "Course ID", "Section", "Title", "Building", "Room", "Meeting Time", "Action"];
 
   return (
     <div>
       <Messages response={message} />
       <SelectTerm buttonText="Get Schedule" onClick={prefetchEnrollments} />
-      <p>To be implemented.  Display a table with the sections the student is enrolled in for the given term.
-        For each section, display the columns as given in headings.
-        For each table row, a Drop button will allow the student to drop the section.
-        Confirm that the user wants to drop before doing the REST delete request.
-      </p>
+      <table className="Center">
+        <thead>
+          <tr>
+            {headings.map((s, idx) => (<th key={idx}>{s}</th>))}
+          </tr>
+        </thead>
+        <tbody>
+          {enrollments.map((course) => (
+            <tr key={course.enrollmentId}>
+              <td>{course.year}</td>
+              <td>{course.semester}</td>
+              <td>{course.courseId}</td>
+              <td>{course.sectionId}</td>
+              <td>{course.title}</td>
+              <td>{course.building}</td>
+              <td>{course.room}</td>
+              <td>{course.times}</td>
+              <td><button onClick={() => onDrop(course.enrollmentId)}>Drop</button></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
     </div>
   );
