@@ -124,6 +124,7 @@ const AssignmentGrade = ({ assignment }) => {
                 <td>{grade.studentEmail}</td>
                 <td>
                   <input
+                    id={`score-${grade.studentEmail}`}
                     type="number"
                     min="0"
                     max="100"
@@ -142,11 +143,11 @@ const AssignmentGrade = ({ assignment }) => {
           <p>No students are enrolled in this section.</p>
         )}
 
-        <button onClick={saveGrades}>
+        <button id="saveGradesButton" onClick={saveGrades}>
           Save
         </button>
 
-        <button onClick={editClose}>
+        <button id="closeGradesButton" onClick={editClose}>
           Close
         </button>
       </dialog>
