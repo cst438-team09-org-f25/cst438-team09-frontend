@@ -117,11 +117,11 @@ const AssignmentAdd = ({ onClose, secNo, secId, courseId }) => {
         </div>
 
         <div>
-          <button type="button" onClick={editClose}>
+          <button id="closeAssignmentButton" type="button" onClick={editClose}>
             Close
           </button>
 
-          <button type="button" onClick={saveAssignment}>
+          <button id="saveAssignmentButton" type="button" onClick={saveAssignment}>
             Save
           </button>
         </div>
